@@ -1,0 +1,793 @@
+/* 
+   VARIABLES DE COLOR
+   Definimos los colores aquí una sola vez
+   y los usamos en todo el archivo con var()
+*/
+:root {
+  --dorado:        #D4A017;
+  --dorado-claro:  #F0C040;
+  --dorado-palido: #fde98a;
+  --dorado-oscuro: #9A7010;
+  --negro:         #070707;
+  --negro-2:       #0f0f0f;
+  --negro-3:       #181818;
+  --negro-4:       #1f1f1f;
+  --morado:        #6B2FA0;
+  --morado-claro:  #8B3FC0;
+  --morado-oscuro: #4a1f72;
+}
+
+
+/* 
+   RESET Y BASE
+   Quitamos márgenes/rellenos por defecto
+   y establecemos fuente y fondo general
+ */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth; /* scroll suave al hacer clic en anclas */
+}
+
+body {
+  background-color: var(--negro);
+  color: var(--dorado-claro);
+  font-family: 'Cormorant Garamond', serif;
+  overflow-x: hidden; /* evita scroll horizontal */
+}
+
+/* Fondo con degradados decorativos (capas superpuestas) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 55% at 50% -5%, rgba(107,47,160,.22) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 50% at 90% 90%, rgba(212,160,23,.07) 0%, transparent 55%),
+    repeating-linear-gradient(45deg, transparent 0 39px, rgba(212,160,23,.013) 39px 40px);
+}
+
+
+/* 
+   ANIMACIÓN FADE UP
+   Los elementos empiezan invisibles y suben
+   al cargar la página (usado en el hero)
+ */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* 
+   ANIMACIONES AL HACER SCROLL
+ */
+.animar {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.animar-izquierda {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition: opacity 0.85s ease, transform 0.85s ease;
+}
+
+.animar.visible,
+.animar-izquierda.visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+
+/* 
+   HERO (sección de portada)
+*/
+.hero {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;          /* ocupa toda la altura de la pantalla */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+}
+
+.subtitulo-pequeno {
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(0.8rem, 1.8vw, 1rem); /* clamp: tamaño mínimo, ideal, máximo */
+  letter-spacing: 0.4em;
+  color: var(--morado-claro);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.3s; /* empieza 0.3s después de cargar */
+}
+
+.titulo-principal {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 900;
+  font-size: clamp(3.2rem, 13vw, 10.5rem);
+  line-height: 0.88;
+  /* Truco para texto con degradado */
+  background: linear-gradient(140deg, var(--dorado-oscuro) 0%, var(--dorado-palido) 40%, var(--dorado) 60%, var(--dorado-oscuro) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 50px rgba(212,160,23,.28));
+  opacity: 0;
+  animation: fadeUp 1.1s ease forwards 0.5s;
+}
+
+.eslogan {
+  margin-top: 22px;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1rem, 2.3vw, 1.45rem);
+  color: rgba(240,192,64,.5);
+  letter-spacing: 0.15em;
+  opacity: 0;
+  animation: fadeUp 1s ease forwards 0.75s;
+}
+
+/* 
+   BARRA DE NAVEGACIÓN
+ */
+.navbar {
+  position: sticky; /* se queda pegada arriba al hacer scroll */
+  top: 0;
+  z-index: 200;
+  width: 100%;
+  background: rgba(7,7,7,.94);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(212,160,23,.2);
+  border-bottom: 1px solid rgba(212,160,23,.1);
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.navbar li {
+  flex: 1;
+  position: relative;
+}
+
+/* Línea separadora entre ítems del menú */
+.navbar li::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 22%;
+  height: 56%;
+  width: 1px;
+  background: rgba(212,160,23,.12);
+}
+
+.navbar li:last-child::after {
+  display: none; /* no mostrar línea al final */
+}
+
+.navbar li a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(0.52rem, 1.4vw, 0.76rem);
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--dorado);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+/* Línea que aparece debajo del enlace al pasar el mouse */
+.navbar li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 55%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--morado), var(--dorado-claro));
+  transition: transform 0.35s ease;
+}
+
+.navbar li a:hover {
+  color: var(--dorado-claro);
+  background: rgba(107,47,160,.09);
+}
+
+.navbar li a:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+
+/* 
+   SECCIONES (estructura general)
+ */
+
+/* Cada <section> usa la clase .seccion */
+.seccion {
+  position: relative;
+  z-index: 1;
+  padding: 100px 40px;
+}
+
+/* Fondo levemente más claro para alternar secciones */
+.fondo-oscuro {
+  background: var(--negro-2);
+}
+
+/* Contenedor interno que limita el ancho */
+.contenido-seccion {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Dos columnas iguales (visión, misión) */
+.dos-columnas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+/* Dos columnas: imagen fija + texto flexible (sección buscan) */
+.dos-columnas-imagen {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Elementos reutilizables dentro de las secciones */
+.etiqueta {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.6rem;
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--morado-claro);
+  margin-bottom: 20px;
+}
+
+.etiqueta::before {
+  content: '✦  ';
+}
+
+.titulo-seccion {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.8vw, 3rem);
+  color: var(--dorado-claro);
+  line-height: 1.12;
+  margin-bottom: 28px;
+}
+
+.titulo-centrado {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.8vw, 3rem);
+  color: var(--dorado-claro);
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.subtitulo-seccion {
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  color: rgba(240,192,64,.5);
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: 50px;
+}
+
+.texto {
+  font-weight: 300;
+  font-size: clamp(1.05rem, 1.9vw, 1.25rem);
+  line-height: 1.95;
+  color: rgba(240,192,64,.62);
+}
+
+/* Cita con borde izquierdo morado */
+.cita {
+  border-left: 3px solid var(--morado);
+  padding-left: 24px;
+  margin-top: 30px;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: rgba(240,192,64,.45);
+  line-height: 1.8;
+}
+
+/* Línea divisora entre secciones */
+.separador {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212,160,23,.18), rgba(107,47,160,.25), rgba(212,160,23,.18), transparent);
+  margin: 0;
+}
+
+/* Para centrar un div dentro de su celda */
+.centrado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* 
+   HEXÁGONO DECORATIVO (sección visión)
+ */
+.hexagono {
+  width: 260px;
+  height: 260px;
+  background: linear-gradient(135deg, var(--morado-oscuro), var(--negro-3));
+  /* clip-path crea la forma de hexágono */
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 60px rgba(107,47,160,.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.hexagono::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: linear-gradient(135deg, var(--negro-3), var(--morado-oscuro));
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.hexagono-interior {
+  position: relative;
+  z-index: 1;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  color: var(--dorado-oscuro);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+
+/* 
+   CAJA DE IMAGEN (sección buscan)
+*/
+.caja-imagen {
+  width: 100%;
+  aspect-ratio: 4 / 5;   /* proporción del cuadro */
+  background-color: white;
+  border: 4px solid;
+  border-color: #9A7010;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 
+.caja-imagen img{
+  width: 285px;
+  height: 410px;
+  object-fit: cover;
+}
+
+/* 
+   ESTADÍSTICAS (sección misión)
+ */
+.estadisticas {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.stat {
+  background: var(--negro-4);
+  border: 1px solid rgba(212,160,23,.13);
+  border-left: 3px solid var(--morado);
+  padding: 22px 24px;
+  transition: box-shadow 0.3s;
+}
+
+.stat:hover {
+  box-shadow: 0 0 28px rgba(107,47,160,.15);
+}
+
+.stat-numero {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  color: var(--dorado);
+  margin-bottom: 4px;
+}
+
+.stat-descripcion {
+  font-size: 0.85rem;
+  color: rgba(240,192,64,.45);
+  font-weight: 300;
+}
+
+
+/* 
+   GRID DE VALORES (4 tarjetas)
+ */
+.grid-valores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(212,160,23,.1);  /* color del espacio entre tarjetas */
+  border: 1px solid rgba(212,160,23,.12);
+}
+
+.tarjeta-valor {
+  background: var(--negro-2);
+  padding: 36px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+  transition: background 0.3s;
+  position: relative;
+}
+
+/* Línea dorada/morada que aparece arriba al pasar el mouse */
+.tarjeta-valor::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--morado), transparent);
+  transition: width 0.35s ease;
+}
+
+.tarjeta-valor:hover {
+  background: var(--negro-3);
+}
+
+.tarjeta-valor:hover::before {
+  width: 90%;
+}
+
+.icono {
+  font-size: 1.8rem;
+}
+
+.nombre-valor {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dorado);
+}
+
+.descripcion-valor {
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(240,192,64,.45);
+}
+
+
+/* 
+   GRID DE SERVICIOS (6 tarjetas)
+ */
+.grid-servicios {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.tarjeta-servicio {
+  background: var(--negro-3);
+  border: 1px solid rgba(212,160,23,.12);
+  border-radius: 2px;
+  padding: 32px 26px;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+}
+
+/* Barra de color a la izquierda de cada tarjeta */
+.tarjeta-servicio::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--morado), var(--dorado-oscuro));
+}
+
+.tarjeta-servicio:hover {
+  border-color: rgba(107,47,160,.45);
+  box-shadow: 0 0 35px rgba(107,47,160,.2);
+  transform: translateY(-4px);
+}
+
+.icono-servicio {
+  font-size: 1.6rem;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.tarjeta-servicio h3 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  color: var(--dorado);
+  margin-bottom: 12px;
+}
+
+.tarjeta-servicio p {
+  font-size: 0.98rem;
+  font-weight: 300;
+  line-height: 1.75;
+  color: rgba(240,192,64,.5);
+}
+
+
+/* 
+   GRID DE GÉNEROS (10 tarjetas)
+ */
+.grid-generos {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+
+.tarjeta-genero {
+  background: var(--negro-3);
+  border: 1px solid rgba(212,160,23,.1);
+  border-radius: 2px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 1 / 1.15;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+.tarjeta-genero:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 24px rgba(107,47,160,.15);
+  border-color: rgba(107,47,160,.4);
+}
+
+/* Parte superior de la tarjeta: el color de fondo con el emoji */
+.genero-imagen {
+  flex: 1;                /* ocupa todo el espacio disponible */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  position: relative;
+}
+
+/* Superposición oscura sobre el color para suavizarlo */
+.genero-imagen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(107,47,160,.15), rgba(212,160,23,.08));
+}
+
+.genero-imagen span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Parte inferior de la tarjeta: el nombre del género */
+.genero-nombre {
+  padding: 10px;
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: clamp(0.48rem, 0.9vw, 0.66rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dorado);
+  text-align: center;
+  background: var(--negro-3);
+  border-top: 1px solid rgba(212,160,23,.1);
+}
+
+
+/* 
+   PIE DE PÁGINA (footer)
+ */
+footer {
+  position: relative;
+  z-index: 1;
+  background: var(--negro-2);
+  border-top: 2px solid rgba(212,160,23,.12);
+}
+
+/* Tres columnas del footer */
+.footer-columnas {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 2fr ;
+  gap: 48px;
+  padding: 70px 40px 48px;
+  border-bottom: 1px solid rgba(212,160,23,.08);
+}
+
+.footer-nombre {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 1.2rem;
+  color: var(--dorado);
+  margin-bottom: 14px;
+}
+
+.footer-descripcion {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(240,192,64,.4);
+  font-style: italic;
+}
+
+/* Título de cada columna del footer */
+.footer-titulo-columna {
+  font-family: 'Cinzel Decorative', cursive;
+  font-size: 0.62rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--morado-claro);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Línea después del título */
+.footer-titulo-columna::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(107,47,160,.3);
+}
+
+/* Cada fila de dato (ícono + texto) */
+.footer-dato {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: rgba(240,192,64,.45);
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.5;
+}
+
+/* Barra inferior del footer: copyright + redes */
+.footer-barra-inferior {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 22px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-barra-inferior p {
+  font-size: 0.8rem;
+  color: rgba(212,160,23,.25);
+  font-style: italic;
+}
+
+.footer-redes {
+  display: flex;
+  gap: 14px;
+}
+
+.footer-redes a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(212,160,23,.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(212,160,23,.45);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.footer-redes a:hover {
+  border-color: var(--morado);
+  color: var(--dorado-claro);
+  background: rgba(107,47,160,.15);
+}
+
+
+/* 
+   RESPONSIVE (pantallas pequeñas)
+   @media = "si la pantalla mide menos de X"
+*/
+@media (max-width: 900px) {
+  .dos-columnas,
+  .dos-columnas-imagen {
+    grid-template-columns: 1fr; /* una sola columna en tablet */
+    gap: 40px;
+  }
+
+  .caja-imagen {
+    aspect-ratio: 16 / 9;
+  }
+
+  .grid-valores {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-servicios {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-generos {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footer-columnas {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .seccion {
+    padding: 70px 22px;
+  }
+
+  .navbar li a {
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    height: 52px;
+  }
+
+  .grid-valores {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .grid-servicios {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-generos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footer-columnas {
+    grid-template-columns: 1fr;
+  }
+}
